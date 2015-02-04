@@ -1,5 +1,5 @@
 {
-  "name": "rhubarbphp/scaffold-menu-navigation",
+  "name": "rhubarbphp/scaffold-navigation-menu",
   "description": "Provides a model to store a tree of menu items and various presenters for using these as navigation",
   "keywords": [ "menu", "navigation", "rhubarb", "php", "framework" ],
   "homepage": "http://www.rhubarbphp.com/",
