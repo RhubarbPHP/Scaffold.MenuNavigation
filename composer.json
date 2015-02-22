@@ -1,0 +1,25 @@
+{
+  "name": "rhubarbphp/scaffold-navigation-menu",
+  "description": "Provides a model to store a tree of menu items and various presenters for using these as navigation",
+  "keywords": [ "menu", "navigation", "rhubarb", "php", "framework" ],
+  "homepage": "http://www.rhubarbphp.com/",
+  "license": "Apache-2.0",
+  "autoload": {
+    "psr-4": {
+      "Rhubarb\\Scaffolds\\NavigationMenu\\": "src/",
+      "Rhubarb\\Scaffolds\\NavigationMenu\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/acuthbert/rhubarb"
+    }
+  ],
+  "require": {
+    "rhubarbphp/rhubarb": "dev-crown"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "3.*"
+  }
+}
