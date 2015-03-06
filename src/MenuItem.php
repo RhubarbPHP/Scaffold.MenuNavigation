@@ -83,6 +83,17 @@ class MenuItem extends Model
         return $menus;
     }
 
+    /**
+     * An opportunity for extenders to control visiblity of menu items on a per item basis
+     *
+     * This allows consumers of the scaffold to override the MenuItem object and
+     * integrate with permission systems.
+     */
+    public function isPermitted()
+    {
+       return true;
+    }
+
     protected function getChildren()
     {
         $this->clearPropertyCache();

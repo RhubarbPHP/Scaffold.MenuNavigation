@@ -21,6 +21,7 @@ namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
 use Rhubarb\Crown\Context;
 use Rhubarb\Scaffolds\NavigationMenu\MenuItem;
 use Rhubarb\Leaf\Presenters\Presenter;
+use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
 
 class TwoLevelMenuPresenter extends Presenter
@@ -89,5 +90,32 @@ class TwoLevelMenuPresenter extends Presenter
                 }
             }
         }
+
+        $this->view->primaryMenuItems = $this->view->primaryMenuItems->toArray();
+
+        if ( $this->view->secondaryMenuItems instanceof Collection ) {
+            $this->view->secondaryMenuItems = $this->view->secondaryMenuItems->toArray();
+        }
+
+        // Process security by removing items which are not permitted.
+        $itemsToRemove = [];
+        // Remove items that we don't have permission to see.
+        foreach( $this->view->primaryMenuItems as $key => $item ) {
+            if ( !$item->isPermitted() ){
+                $itemsToRemove[] = $key;
+            }
+        }
+
+        $this->view->primaryMenuItems = array_diff_key( $this->view->primaryMenuItems, $itemsToRemove );
+
+        $itemsToRemove = [];
+        // Remove items that we don't have permission to see.
+        foreach( $this->view->secondaryMenuItems as $key => $item ) {
+            if ( !$item->isPermitted() ){
+                $itemsToRemove[] = $key;
+            }
+        }
+
+        $this->view->secondaryMenuItems = array_diff_key( $this->view->secondaryMenuItems, $itemsToRemove );
     }
 }
