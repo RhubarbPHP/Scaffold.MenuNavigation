@@ -21,11 +21,11 @@ namespace Rhubarb\Scaffolds\NavigationMenu;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Int;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Varchar;
-use Rhubarb\Stem\Repositories\MySql\Schema\Index;
-use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
+use Rhubarb\Stem\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Schema\Columns\Integer;
+use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
  * Models a menu item
@@ -51,20 +51,18 @@ class MenuItem extends Model
      */
     protected function createSchema()
     {
-        $schema = new MySqlSchema("tblMenuItem");
+        $schema = new ModelSchema("tblMenuItem");
 
         $schema->addColumn(
             new AutoIncrement("MenuItemID"),
-            new Int("ParentMenuItemID", 0),
-            new Varchar("MenuName", 50),
-            new Varchar("Url", 200),
-            new Varchar("SecurityOption", 200),
-            new Varchar("ParentMenuItemIDs", 200),
-            new Varchar("CssClassName", 40),
-            new Int("Position", 0)
+            new ForeignKey("ParentMenuItemID", 0),
+            new String("MenuName", 50),
+            new String("Url", 200),
+            new String("SecurityOption", 200),
+            new String("ParentMenuItemIDs", 200),
+            new String("CssClassName", 40),
+            new Integer("Position", 0)
         );
-
-        $schema->addIndex(new Index("ParentMenuItemID", Index::INDEX));
 
         return $schema;
     }
