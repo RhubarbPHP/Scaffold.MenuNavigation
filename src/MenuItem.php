@@ -89,7 +89,7 @@ class MenuItem extends Model
      */
     public function isPermitted()
     {
-       return true;
+        return true;
     }
 
     protected function getChildren()
