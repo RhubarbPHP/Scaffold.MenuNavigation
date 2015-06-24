@@ -1,12 +1,11 @@
 <?php
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Tests\Presenters;
 
 use Rhubarb\Crown\Context;
-use Rhubarb\Leaf\Views\UnitTestView;
-use Rhubarb\Scaffolds\NavigationMenu\MenuItemTest;
-
-include_once(__DIR__ . "/../MenuItemTest.php");
+use Rhubarb\Leaf\Tests\Fixtures\Presenters\UnitTestView;
+use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenuPresenter;
+use Rhubarb\Scaffolds\NavigationMenu\Tests\MenuItemTest;
 
 class TwoLevelMenuPresenterTest extends MenuItemTest
 {
