@@ -82,7 +82,7 @@ class MenuItem extends Model
     }
 
     /**
-     * An opportunity for extenders to control visiblity of menu items on a per item basis
+     * An opportunity for extenders to control visibility of menu items on a per item basis
      *
      * This allows consumers of the scaffold to override the MenuItem object and
      * integrate with permission systems.
