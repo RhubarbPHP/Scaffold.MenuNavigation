@@ -21,10 +21,10 @@ namespace Rhubarb\Scaffolds\NavigationMenu;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Schema\Columns\Integer;
-use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
+use Rhubarb\Stem\Schema\Columns\ForeignKeyColumn;
+use Rhubarb\Stem\Schema\Columns\IntegerColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
@@ -54,14 +54,14 @@ class MenuItem extends Model
         $schema = new ModelSchema("tblMenuItem");
 
         $schema->addColumn(
-            new AutoIncrement("MenuItemID"),
-            new ForeignKey("ParentMenuItemID", 0),
-            new String("MenuName", 50),
-            new String("Url", 200),
-            new String("SecurityOption", 200),
-            new String("ParentMenuItemIDs", 200),
-            new String("CssClassName", 40),
-            new Integer("Position", 0)
+            new AutoIncrementColumn("MenuItemID"),
+            new ForeignKeyColumn("ParentMenuItemID", 0),
+            new StringColumn("MenuName", 50),
+            new StringColumn("Url", 200),
+            new StringColumn("SecurityOption", 200),
+            new StringColumn("ParentMenuItemIDs", 200),
+            new StringColumn("CssClassName", 40),
+            new IntegerColumn("Position", 0)
         );
 
         return $schema;
