@@ -11,15 +11,15 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
 {
     public function testMenuViewGetsCorrectMenus()
     {
-        $request = Context::CurrentRequest();
+        $request = Context::currentRequest();
         $request->UrlPath = "/";
 
         $view = new UnitTestView();
 
         $menu = new TwoLevelMenuPresenter();
-        $menu->AttachMockView($view);
+        $menu->attachMockView($view);
 
-        $menu->Test();
+        $menu->test();
 
         $this->assertCount(5, $view->primaryMenuItems);
         $this->assertCount(0, $view->secondaryMenuItems);
@@ -29,21 +29,21 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
 
         $request->UrlPath = "/companies/";
 
-        $menu->Test();
+        $menu->test();
 
         $this->assertCount(5, $view->primaryMenuItems);
         $this->assertEquals("History", $view->secondaryMenuItems[1]->MenuName);
 
         $request->UrlPath = "/companies/history/";
 
-        $menu->Test();
+        $menu->test();
 
         $this->assertCount(5, $view->primaryMenuItems);
         $this->assertEquals("History", $view->secondaryMenuItems[1]->MenuName);
 
         $request->UrlPath = "/companies/history/ancient/";
 
-        $menu->Test();
+        $menu->test();
 
         $this->assertEquals("Ancient History", $view->secondaryMenuItems[0]->MenuName);
         $this->assertEquals(5, $view->activePrimaryMenuItemId);
@@ -51,7 +51,7 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
 
         $request->UrlPath = "/setup/help/closing/";
 
-        $menu->Test();
+        $menu->test();
 
         $this->assertEquals(6, $view->activeSecondaryMenuItemId);
     }

@@ -67,7 +67,7 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
 
                         ?>
                     </ul>
-                <?php
+                    <?php
                 }
 
                 print "</li>";
@@ -75,6 +75,6 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
 
             ?>
         </ul>
-    <?php
+        <?php
     }
 }
