@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Scaffolds\NavigationMenu\Tests\Presenters;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Request\Request;
 use Rhubarb\Leaf\Tests\Fixtures\Presenters\UnitTestView;
 use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenuPresenter;
 use Rhubarb\Scaffolds\NavigationMenu\Tests\MenuItemTest;
@@ -11,8 +11,8 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
 {
     public function testMenuViewGetsCorrectMenus()
     {
-        $request = Context::currentRequest();
-        $request->UrlPath = "/";
+        $request = Request::current();
+        $request->urlPath = "/";
 
         $view = new UnitTestView();
 
@@ -27,21 +27,21 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
         $this->assertEquals("/companies/", $view->primaryMenuItems[1]->Url);
         $this->assertEquals("/setup/", $view->primaryMenuItems[2]->Url);
 
-        $request->UrlPath = "/companies/";
+        $request->urlPath = "/companies/";
 
         $menu->test();
 
         $this->assertCount(5, $view->primaryMenuItems);
         $this->assertEquals("History", $view->secondaryMenuItems[1]->MenuName);
 
-        $request->UrlPath = "/companies/history/";
+        $request->urlPath = "/companies/history/";
 
         $menu->test();
 
         $this->assertCount(5, $view->primaryMenuItems);
         $this->assertEquals("History", $view->secondaryMenuItems[1]->MenuName);
 
-        $request->UrlPath = "/companies/history/ancient/";
+        $request->urlPath = "/companies/history/ancient/";
 
         $menu->test();
 
@@ -49,7 +49,7 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
         $this->assertEquals(5, $view->activePrimaryMenuItemId);
         $this->assertEquals(8, $view->activeSecondaryMenuItemId);
 
-        $request->UrlPath = "/setup/help/closing/";
+        $request->urlPath = "/setup/help/closing/";
 
         $menu->test();
 

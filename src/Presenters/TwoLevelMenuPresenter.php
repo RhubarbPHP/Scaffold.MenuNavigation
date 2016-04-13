@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Request\Request;
 use Rhubarb\Leaf\Presenters\Presenter;
 use Rhubarb\Scaffolds\NavigationMenu\MenuItem;
 use Rhubarb\Stem\Collections\Collection;
@@ -35,7 +35,7 @@ class TwoLevelMenuPresenter extends Presenter
     {
         parent::applyModelToView();
 
-        $currentUrl = Context::currentRequest()->UrlPath;
+        $currentUrl = Request::current()->urlPath;
 
         $this->view->primaryMenuItems = MenuItem::getTopLevelMenus();
         $this->view->secondaryMenuItems = [];
