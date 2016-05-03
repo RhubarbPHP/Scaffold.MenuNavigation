@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Leaves;
 
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Leaf\Leaves\Leaf;
@@ -53,8 +53,8 @@ class TwoLevelMenu extends Leaf
 
         $currentUrl = Request::current()->urlPath;
 
-        $this->model->primaryMenuItems = MenuItem::getTopLevelMenus();
-        $this->model->secondaryMenuItems = [];
+        $model->primaryMenuItems = MenuItem::getTopLevelMenus();
+        $model->secondaryMenuItems = [];
 
         $foundActivePrimary = false;
 
@@ -65,10 +65,10 @@ class TwoLevelMenu extends Leaf
             $parents = $menuItem->getParentMenuItemIDArray();
 
             // See which of the top level menu items best matches the current page.
-            foreach ($this->model->primaryMenuItems as $item) {
+            foreach ($model->primaryMenuItems as $item) {
                 if (in_array($item->MenuItemID, $parents) || ($item->Url == $currentUrl)) {
-                    $this->model->activePrimaryMenuItemId = $item->MenuItemID;
-                    $this->model->secondaryMenuItems = $item->Children;
+                    $model->activePrimaryMenuItemId = $item->MenuItemID;
+                    $model->secondaryMenuItems = $item->Children;
 
                     $foundActivePrimary = true;
 
@@ -81,58 +81,58 @@ class TwoLevelMenu extends Leaf
 
         if (!$foundActivePrimary) {
             // See which of the top level menu items best matches the current page.
-            foreach ($this->model->primaryMenuItems as $item) {
+            foreach ($model->primaryMenuItems as $item) {
                 if (stripos($currentUrl, $item->Url) === 0) {
-                    $this->model->activePrimaryMenuItemId = $item->MenuItemID;
-                    $this->model->secondaryMenuItems = $item->Children;
+                    $model->activePrimaryMenuItemId = $item->MenuItemID;
+                    $model->secondaryMenuItems = $item->Children;
                     break;
                 }
             }
         }
 
-        if (isset($this->model->activePrimaryMenuItemId) && ($this->model->activePrimaryMenuItemId !== null)) {
+        if (isset($model->activePrimaryMenuItemId) && ($model->activePrimaryMenuItemId !== null)) {
             // Search for and select the secondary item.
-            foreach ($this->model->secondaryMenuItems as $item) {
+            foreach ($model->secondaryMenuItems as $item) {
                 if ($parents !== null) {
                     if (in_array($item->MenuItemID, $parents) || ($item->Url == $currentUrl)) {
-                        $this->model->activeSecondaryMenuItemId = $item->MenuItemID;
+                        $model->activeSecondaryMenuItemId = $item->MenuItemID;
                         break;
                     }
                 } else {
                     if (stripos($currentUrl, $item->Url) === 0) {
-                        $this->model->activeSecondaryMenuItemId = $item->MenuItemID;
+                        $model->activeSecondaryMenuItemId = $item->MenuItemID;
                         break;
                     }
                 }
             }
         }
 
-        $this->model->primaryMenuItems = $this->model->primaryMenuItems->toArray();
+        $model->primaryMenuItems = $model->primaryMenuItems->toArray();
 
-        if ($this->model->secondaryMenuItems instanceof Collection) {
-            $this->model->secondaryMenuItems = $this->model->secondaryMenuItems->toArray();
+        if ($model->secondaryMenuItems instanceof Collection) {
+            $model->secondaryMenuItems = $model->secondaryMenuItems->toArray();
         }
 
         // Process security by removing items which are not permitted.
         $itemsToRemove = [];
         // Remove items that we don't have permission to see.
-        foreach ($this->model->primaryMenuItems as $key => $item) {
+        foreach ($model->primaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
                 $itemsToRemove[] = $key;
             }
         }
 
-        $this->model->primaryMenuItems = array_diff_key($this->model->primaryMenuItems, $itemsToRemove);
+        $model->primaryMenuItems = array_diff_key($model->primaryMenuItems, $itemsToRemove);
 
         $itemsToRemove = [];
         // Remove items that we don't have permission to see.
-        foreach ($this->model->secondaryMenuItems as $key => $item) {
+        foreach ($model->secondaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
                 $itemsToRemove[] = $key;
             }
         }
 
-        $this->model->secondaryMenuItems = array_diff_key($this->model->secondaryMenuItems, $itemsToRemove);
+        $model->secondaryMenuItems = array_diff_key($model->secondaryMenuItems, $itemsToRemove);
 
         return $model;
     }

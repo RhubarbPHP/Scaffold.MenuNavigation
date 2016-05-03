@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Leaves;
 
 use Rhubarb\Leaf\Leaves\LeafModel;
 
