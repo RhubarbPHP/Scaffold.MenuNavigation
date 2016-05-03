@@ -2,16 +2,16 @@
 
 namespace Rhubarb\Scaffolds\NavigationMenu\Tests;
 
-use Rhubarb\Crown\Tests\RhubarbTestCase;
+use Rhubarb\Crown\Tests\Fixtures\TestCases\RhubarbTestCase;
 use Rhubarb\Scaffolds\NavigationMenu\MenuItem;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuSchema;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
 class MenuItemTest extends RhubarbTestCase
 {
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
         SolutionSchema::registerSchema("NavigationMenu", NavigationMenuSchema::class);
 

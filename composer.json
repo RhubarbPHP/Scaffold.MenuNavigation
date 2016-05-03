@@ -12,7 +12,7 @@
   },
   "require": {
     "rhubarbphp/rhubarb": "^1.0.0",
-    "rhubarbphp/module-stem": "1.0.0",
+    "rhubarbphp/module-stem": "^1.0.0",
     "rhubarbphp/module-leaf": "*"
   },
   "require-dev": {
