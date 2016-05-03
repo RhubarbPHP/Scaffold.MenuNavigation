@@ -18,27 +18,43 @@
 
 namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
 
-use Rhubarb\Crown\Context;
-use Rhubarb\Leaf\Presenters\Presenter;
+use Rhubarb\Crown\Request\Request;
+use Rhubarb\Leaf\Leaves\Leaf;
+use Rhubarb\Leaf\Leaves\LeafModel;
 use Rhubarb\Scaffolds\NavigationMenu\MenuItem;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
 
-class TwoLevelMenuPresenter extends Presenter
+class TwoLevelMenu extends Leaf
 {
-    protected function createView()
+    /**
+     * @var TwoLevelMenuModel
+     */
+    protected $model;
+
+    /**
+     * Returns the name of the standard view used for this leaf.
+     *
+     * @return string
+     */
+    protected function getViewClass()
     {
-        return new TwoLevelMenuView();
+        return TwoLevelMenuView::class;
     }
 
-    protected function applyModelToView()
+    /**
+     * Should return a class that derives from LeafModel
+     *
+     * @return LeafModel
+     */
+    protected function createModel()
     {
-        parent::applyModelToView();
+        $model = new TwoLevelMenuModel();
 
-        $currentUrl = Context::currentRequest()->UrlPath;
+        $currentUrl = Request::current()->urlPath;
 
-        $this->view->primaryMenuItems = MenuItem::getTopLevelMenus();
-        $this->view->secondaryMenuItems = [];
+        $this->model->primaryMenuItems = MenuItem::getTopLevelMenus();
+        $this->model->secondaryMenuItems = [];
 
         $foundActivePrimary = false;
 
@@ -49,10 +65,10 @@ class TwoLevelMenuPresenter extends Presenter
             $parents = $menuItem->getParentMenuItemIDArray();
 
             // See which of the top level menu items best matches the current page.
-            foreach ($this->view->primaryMenuItems as $item) {
+            foreach ($this->model->primaryMenuItems as $item) {
                 if (in_array($item->MenuItemID, $parents) || ($item->Url == $currentUrl)) {
-                    $this->view->activePrimaryMenuItemId = $item->MenuItemID;
-                    $this->view->secondaryMenuItems = $item->Children;
+                    $this->model->activePrimaryMenuItemId = $item->MenuItemID;
+                    $this->model->secondaryMenuItems = $item->Children;
 
                     $foundActivePrimary = true;
 
@@ -65,57 +81,59 @@ class TwoLevelMenuPresenter extends Presenter
 
         if (!$foundActivePrimary) {
             // See which of the top level menu items best matches the current page.
-            foreach ($this->view->primaryMenuItems as $item) {
+            foreach ($this->model->primaryMenuItems as $item) {
                 if (stripos($currentUrl, $item->Url) === 0) {
-                    $this->view->activePrimaryMenuItemId = $item->MenuItemID;
-                    $this->view->secondaryMenuItems = $item->Children;
+                    $this->model->activePrimaryMenuItemId = $item->MenuItemID;
+                    $this->model->secondaryMenuItems = $item->Children;
                     break;
                 }
             }
         }
 
-        if (isset($this->view->activePrimaryMenuItemId) && ($this->view->activePrimaryMenuItemId !== null)) {
+        if (isset($this->model->activePrimaryMenuItemId) && ($this->model->activePrimaryMenuItemId !== null)) {
             // Search for and select the secondary item.
-            foreach ($this->view->secondaryMenuItems as $item) {
+            foreach ($this->model->secondaryMenuItems as $item) {
                 if ($parents !== null) {
                     if (in_array($item->MenuItemID, $parents) || ($item->Url == $currentUrl)) {
-                        $this->view->activeSecondaryMenuItemId = $item->MenuItemID;
+                        $this->model->activeSecondaryMenuItemId = $item->MenuItemID;
                         break;
                     }
                 } else {
                     if (stripos($currentUrl, $item->Url) === 0) {
-                        $this->view->activeSecondaryMenuItemId = $item->MenuItemID;
+                        $this->model->activeSecondaryMenuItemId = $item->MenuItemID;
                         break;
                     }
                 }
             }
         }
 
-        $this->view->primaryMenuItems = $this->view->primaryMenuItems->toArray();
+        $this->model->primaryMenuItems = $this->model->primaryMenuItems->toArray();
 
-        if ($this->view->secondaryMenuItems instanceof Collection) {
-            $this->view->secondaryMenuItems = $this->view->secondaryMenuItems->toArray();
+        if ($this->model->secondaryMenuItems instanceof Collection) {
+            $this->model->secondaryMenuItems = $this->model->secondaryMenuItems->toArray();
         }
 
         // Process security by removing items which are not permitted.
         $itemsToRemove = [];
         // Remove items that we don't have permission to see.
-        foreach ($this->view->primaryMenuItems as $key => $item) {
+        foreach ($this->model->primaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
                 $itemsToRemove[] = $key;
             }
         }
 
-        $this->view->primaryMenuItems = array_diff_key($this->view->primaryMenuItems, $itemsToRemove);
+        $this->model->primaryMenuItems = array_diff_key($this->model->primaryMenuItems, $itemsToRemove);
 
         $itemsToRemove = [];
         // Remove items that we don't have permission to see.
-        foreach ($this->view->secondaryMenuItems as $key => $item) {
+        foreach ($this->model->secondaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
                 $itemsToRemove[] = $key;
             }
         }
 
-        $this->view->secondaryMenuItems = array_diff_key($this->view->secondaryMenuItems, $itemsToRemove);
+        $this->model->secondaryMenuItems = array_diff_key($this->model->secondaryMenuItems, $itemsToRemove);
+
+        return $model;
     }
 }

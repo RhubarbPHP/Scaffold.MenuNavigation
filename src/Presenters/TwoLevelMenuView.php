@@ -22,11 +22,10 @@ use Rhubarb\Leaf\Views\View;
 
 class TwoLevelMenuView extends View
 {
-    public $primaryMenuItems = [];
-    public $secondaryMenuItems = [];
-
-    public $activePrimaryMenuItemId;
-    public $activeSecondaryMenuItemId;
+    /**
+     * @var TwoLevelMenuModel
+     */
+    protected $model;
 
     protected function printViewContent()
     {
@@ -34,10 +33,10 @@ class TwoLevelMenuView extends View
         <ul class='Nav primary'>
             <?php
 
-            foreach ($this->primaryMenuItems as $menuItem) {
+            foreach ($this->model->primaryMenuItems as $menuItem) {
                 $classes = [];
 
-                if ($menuItem->MenuItemID == $this->activePrimaryMenuItemId) {
+                if ($menuItem->MenuItemID == $this->model->activePrimaryMenuItemId) {
                     $classes[] = "-selected";
                 }
 
@@ -55,10 +54,10 @@ class TwoLevelMenuView extends View
         <ul class='Nav secondary'>
             <?php
 
-            foreach ($this->secondaryMenuItems as $menuItem) {
+            foreach ($this->model->secondaryMenuItems as $menuItem) {
                 $classes = [];
 
-                if ($menuItem->MenuItemID == $this->activeSecondaryMenuItemId) {
+                if ($menuItem->MenuItemID == $this->model->activeSecondaryMenuItemId) {
                     $classes[] = "-selected";
                 }
 

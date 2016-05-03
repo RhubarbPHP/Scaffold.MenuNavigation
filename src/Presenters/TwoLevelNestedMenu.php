@@ -21,10 +21,10 @@ namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
 /**
  * A version of the TwoLevelNestedMenuPresenter that uses the nested view.
  */
-class TwoLevelNestedMenuPresenter extends TwoLevelMenuPresenter
+class TwoLevelNestedMenu extends TwoLevelMenu
 {
-    protected function createView()
+    protected function getViewClass()
     {
-        return new TwoLevelNestedMenuView();
+        return TwoLevelNestedMenuView::class;
     }
 } 

@@ -4,7 +4,7 @@ namespace Rhubarb\Scaffolds\NavigationMenu\Tests\Presenters;
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Leaf\Tests\Fixtures\Presenters\UnitTestView;
-use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenuPresenter;
+use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenu;
 use Rhubarb\Scaffolds\NavigationMenu\Tests\MenuItemTest;
 
 class TwoLevelMenuPresenterTest extends MenuItemTest
@@ -16,7 +16,7 @@ class TwoLevelMenuPresenterTest extends MenuItemTest
 
         $view = new UnitTestView();
 
-        $menu = new TwoLevelMenuPresenter();
+        $menu = new TwoLevelMenu();
         $menu->AttachMockView($view);
 
         $menu->Test();

@@ -29,10 +29,10 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
         <ul class='Nav primary'>
             <?php
 
-            foreach ($this->primaryMenuItems as $menuItem) {
+            foreach ($this->model->primaryMenuItems as $menuItem) {
                 $classes = [];
 
-                if ($menuItem->MenuItemID == $this->activePrimaryMenuItemId) {
+                if ($menuItem->MenuItemID == $this->model->activePrimaryMenuItemId) {
                     $classes[] = "-selected";
                 }
 
@@ -44,15 +44,15 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
 
                 print "<li{$class}><a href=\"{$menuItem->Url}\"><span class=\"icon\"></span>{$menuItem->MenuName}</a>";
 
-                if ($menuItem->MenuItemID == $this->activePrimaryMenuItemId) {
+                if ($menuItem->MenuItemID == $this->model->activePrimaryMenuItemId) {
                     ?>
                     <ul title="<?= htmlentities($menuItem->MenuName); ?>" class="subnav">
                         <?php
 
-                        foreach ($this->secondaryMenuItems as $menuItem) {
+                        foreach ($this->model->secondaryMenuItems as $menuItem) {
                             $classes = [];
 
-                            if ($menuItem->MenuItemID == $this->activeSecondaryMenuItemId) {
+                            if ($menuItem->MenuItemID == $this->model->activeSecondaryMenuItemId) {
                                 $classes[] = "-selected";
                             }
 
