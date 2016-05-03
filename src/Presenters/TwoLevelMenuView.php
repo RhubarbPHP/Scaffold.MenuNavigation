@@ -72,6 +72,6 @@ class TwoLevelMenuView extends View
 
             ?>
         </ul>
-    <?php
+        <?php
     }
 }
