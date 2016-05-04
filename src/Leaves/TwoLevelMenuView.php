@@ -27,6 +27,9 @@ class TwoLevelMenuView extends View
      */
     protected $model;
 
+    protected $requiresContainerDiv = false;
+    protected $requiresStateInput = false;
+
     protected function printViewContent()
     {
         ?>
