@@ -33,7 +33,7 @@ class TwoLevelMenuView extends View
     protected function printViewContent()
     {
         ?>
-        <ul class='Nav primary'>
+        <ul class='nav primary'>
             <?php
 
             foreach ($this->model->primaryMenuItems as $menuItem) {
@@ -54,7 +54,7 @@ class TwoLevelMenuView extends View
 
             ?>
         </ul>
-        <ul class='Nav secondary'>
+        <ul class='nav secondary'>
             <?php
 
             foreach ($this->model->secondaryMenuItems as $menuItem) {
