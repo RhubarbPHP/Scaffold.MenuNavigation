@@ -19,28 +19,29 @@
 namespace Rhubarb\Scaffolds\NavigationMenu;
 
 use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Collections\CollectionJoin;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Schema\Columns\Integer;
-use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
+use Rhubarb\Stem\Schema\Columns\ForeignKeyColumn;
+use Rhubarb\Stem\Schema\Columns\IntegerColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
  * Models a menu item
  *
- * @property int $MenuItemID
- * @property int $ParentMenuItemID
- * @property string $MenuName
- * @property string $Url
- * @property string $SecurityOption
- * @property string $ParentMenuItemIDs
- * @property string $CssClassName
- * @property int $Position
- *
- * @property MenuItem[] $Children
- * @property MenuItem $Parent
+ * @property int $MenuItemID Repository field
+ * @property int $ParentMenuItemID Repository field
+ * @property string $MenuName Repository field
+ * @property string $Url Repository field
+ * @property string $SecurityOption Repository field
+ * @property string $ParentMenuItemIDs Repository field
+ * @property string $CssClassName Repository field
+ * @property int $Position Repository field
+ * @property-read MenuItem $Parent Relationship
+ * @property-read MenuItem[]|Collection $ChildMenuItems Relationship
+ * @property-read mixed $ParentMenuItemIDArray {@link getParentMenuItemIDArray()}
  */
 class MenuItem extends Model
 {
@@ -54,14 +55,14 @@ class MenuItem extends Model
         $schema = new ModelSchema("tblMenuItem");
 
         $schema->addColumn(
-            new AutoIncrement("MenuItemID"),
-            new ForeignKey("ParentMenuItemID", 0),
-            new String("MenuName", 50),
-            new String("Url", 200),
-            new String("SecurityOption", 200),
-            new String("ParentMenuItemIDs", 200),
-            new String("CssClassName", 40),
-            new Integer("Position", 0)
+            new AutoIncrementColumn("MenuItemID"),
+            new ForeignKeyColumn("ParentMenuItemID", 0),
+            new StringColumn("MenuName", 50),
+            new StringColumn("Url", 200),
+            new StringColumn("SecurityOption", 200),
+            new StringColumn("ParentMenuItemIDs", 200),
+            new StringColumn("CssClassName", 40),
+            new IntegerColumn("Position", 0)
         );
 
         return $schema;
@@ -69,8 +70,8 @@ class MenuItem extends Model
 
     public static function getTopLevelMenus()
     {
-        $menus = new Collection("MenuItem");
-        $menus->filter(new Equals("ParentMenuItemID", 0));
+        $menus = MenuItem::find(new Equals("ParentMenuItemID", 0));
+        //$menus->filter(new Equals("ParentMenuItemID", 0));
         $menus->replaceSort(
             [
                 "Position" => false,

@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Leaves;
 
 /**
  * A version of the two level menu which nests the secondary UL inside the primary LI
@@ -67,7 +67,7 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
 
                         ?>
                     </ul>
-                <?php
+                    <?php
                 }
 
                 print "</li>";
@@ -75,6 +75,6 @@ class TwoLevelNestedMenuView extends TwoLevelMenuView
 
             ?>
         </ul>
-    <?php
+        <?php
     }
 }

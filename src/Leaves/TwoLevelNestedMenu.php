@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Leaves;
 
 /**
  * A version of the TwoLevelNestedMenuPresenter that uses the nested view.

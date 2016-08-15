@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\NavigationMenu\Presenters;
+namespace Rhubarb\Scaffolds\NavigationMenu\Leaves;
 
 use Rhubarb\Leaf\Views\View;
 
@@ -27,10 +27,13 @@ class TwoLevelMenuView extends View
      */
     protected $model;
 
+    protected $requiresContainerDiv = false;
+    protected $requiresStateInput = false;
+
     protected function printViewContent()
     {
         ?>
-        <ul class='Nav primary'>
+        <ul class='nav primary'>
             <?php
 
             foreach ($this->model->primaryMenuItems as $menuItem) {
@@ -51,7 +54,7 @@ class TwoLevelMenuView extends View
 
             ?>
         </ul>
-        <ul class='Nav secondary'>
+        <ul class='nav secondary'>
             <?php
 
             foreach ($this->model->secondaryMenuItems as $menuItem) {
@@ -72,6 +75,6 @@ class TwoLevelMenuView extends View
 
             ?>
         </ul>
-    <?php
+        <?php
     }
 }
