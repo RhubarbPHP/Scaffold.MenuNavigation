@@ -19,6 +19,7 @@
 namespace Rhubarb\Scaffolds\NavigationMenu;
 
 use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Collections\CollectionJoin;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
@@ -30,17 +31,17 @@ use Rhubarb\Stem\Schema\ModelSchema;
 /**
  * Models a menu item
  *
- * @property int $MenuItemID
- * @property int $ParentMenuItemID
- * @property string $MenuName
- * @property string $Url
- * @property string $SecurityOption
- * @property string $ParentMenuItemIDs
- * @property string $CssClassName
- * @property int $Position
- *
- * @property MenuItem[] $Children
- * @property MenuItem $Parent
+ * @property int $MenuItemID Repository field
+ * @property int $ParentMenuItemID Repository field
+ * @property string $MenuName Repository field
+ * @property string $Url Repository field
+ * @property string $SecurityOption Repository field
+ * @property string $ParentMenuItemIDs Repository field
+ * @property string $CssClassName Repository field
+ * @property int $Position Repository field
+ * @property-read MenuItem $Parent Relationship
+ * @property-read MenuItem[]|Collection $ChildMenuItems Relationship
+ * @property-read mixed $ParentMenuItemIDArray {@link getParentMenuItemIDArray()}
  */
 class MenuItem extends Model
 {
@@ -69,8 +70,8 @@ class MenuItem extends Model
 
     public static function getTopLevelMenus()
     {
-        $menus = new Collection("MenuItem");
-        $menus->filter(new Equals("ParentMenuItemID", 0));
+        $menus = MenuItem::find(new Equals("ParentMenuItemID", 0));
+        //$menus->filter(new Equals("ParentMenuItemID", 0));
         $menus->replaceSort(
             [
                 "Position" => false,
