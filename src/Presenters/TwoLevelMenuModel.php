@@ -8,6 +8,9 @@ class TwoLevelMenuModel extends LeafModel
 {
     public $primaryMenuItems = [];
     public $secondaryMenuItems = [];
+    
+    public $primaryContainerClasses = [];
+    public $secondaryContainerClasses = [];
 
     public $activePrimaryMenuItemId;
     public $activeSecondaryMenuItemId;

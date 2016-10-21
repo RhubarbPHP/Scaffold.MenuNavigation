@@ -26,16 +26,20 @@ class NavigationMenuSchema extends SolutionSchema
     {
         parent::__construct($version);
 
-        $this->addModel("MenuItem", __NAMESPACE__ . "\MenuItem");
+        $this->addModel('Menu', Menu::class, 1);
+        $this->addModel("MenuItem", MenuItem::class, 2);
     }
 
     protected function defineRelationships()
     {
         $this->declareOneToManyRelationships(
             [
+                'Menu' => [
+                    'MenuItems' => 'MenuItem.MenuID',
+                ],
                 "MenuItem" => [
                     "ChildMenuItems" => "MenuItem.ParentMenuItemID:Parent"
-                ]
+                ],
             ]
         );
     }
