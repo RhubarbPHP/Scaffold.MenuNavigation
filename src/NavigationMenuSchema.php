@@ -20,22 +20,34 @@ namespace Rhubarb\Scaffolds\NavigationMenu;
 
 use Rhubarb\Stem\Schema\SolutionSchema;
 
+/**
+ * Class NavigationMenuSchema
+ * @package Rhubarb\Scaffolds\NavigationMenu
+ */
 class NavigationMenuSchema extends SolutionSchema
 {
+    /**
+     * NavigationMenuSchema constructor.
+     * @param float $version
+     */
     public function __construct($version = 0.1)
     {
         parent::__construct($version);
 
-        $this->addModel("MenuItem", __NAMESPACE__ . "\MenuItem");
+        $this->addModel('Menu', Menu::class, 1);
+        $this->addModel("MenuItem", MenuItem::class, 2);
     }
 
     protected function defineRelationships()
     {
         $this->declareOneToManyRelationships(
             [
+                'Menu' => [
+                    'MenuItems' => 'MenuItem.MenuID',
+                ],
                 "MenuItem" => [
                     "ChildMenuItems" => "MenuItem.ParentMenuItemID:Parent"
-                ]
+                ],
             ]
         );
     }

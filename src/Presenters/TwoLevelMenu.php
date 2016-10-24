@@ -51,10 +51,29 @@ class TwoLevelMenu extends Leaf
     {
         $model = new TwoLevelMenuModel();
 
+        $model->secondaryContainerClasses = $model->primaryContainerClasses = [
+            'Nav',
+            'primary',
+        ];
+
+        return $model;
+    }
+
+    protected function onModelCreated()
+    {
+        parent::onModelCreated();
+
+        $this->setPrimaryContainerValues(MenuItem::getTopLevelMenus());
+    }
+
+    /**
+     * @param Collection $collection
+     */
+    public function setPrimaryContainerValues(Collection $collection)
+    {
         $currentUrl = Request::current()->urlPath;
 
-        $this->model->primaryMenuItems = MenuItem::getTopLevelMenus();
-        $this->model->secondaryMenuItems = [];
+        $this->model->primaryMenuItems = $collection;
 
         $foundActivePrimary = false;
 
@@ -133,7 +152,21 @@ class TwoLevelMenu extends Leaf
         }
 
         $this->model->secondaryMenuItems = array_diff_key($this->model->secondaryMenuItems, $itemsToRemove);
+    }
 
-        return $model;
+    /**
+     * @param $classes
+     */
+    public function setPrimaryContainerClasses($classes)
+    {
+        $this->model->primaryContainerClasses = $classes;
+    }
+
+    /**
+     * @param $classes
+     */
+    public function setSecondaryContainerClasses($classes)
+    {
+        $this->model->secondaryContainerClasses = $classes;
     }
 }
