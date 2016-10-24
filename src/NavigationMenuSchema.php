@@ -20,8 +20,16 @@ namespace Rhubarb\Scaffolds\NavigationMenu;
 
 use Rhubarb\Stem\Schema\SolutionSchema;
 
+/**
+ * Class NavigationMenuSchema
+ * @package Rhubarb\Scaffolds\NavigationMenu
+ */
 class NavigationMenuSchema extends SolutionSchema
 {
+    /**
+     * NavigationMenuSchema constructor.
+     * @param float $version
+     */
     public function __construct($version = 0.1)
     {
         parent::__construct($version);

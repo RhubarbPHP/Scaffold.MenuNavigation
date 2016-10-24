@@ -59,6 +59,13 @@ class TwoLevelMenu extends Leaf
         return $model;
     }
 
+    protected function onModelCreated()
+    {
+        parent::onModelCreated();
+
+        $this->setPrimaryContainerValues(MenuItem::getTopLevelMenus());
+    }
+
     /**
      * @param Collection $collection
      */

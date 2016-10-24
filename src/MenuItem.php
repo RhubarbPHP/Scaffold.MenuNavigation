@@ -18,7 +18,9 @@
 
 namespace Rhubarb\Scaffolds\NavigationMenu;
 
+use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Collections\RepositoryCollection;
+use Rhubarb\Stem\Filters\AndGroup;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
@@ -38,9 +40,12 @@ use Rhubarb\Stem\Schema\ModelSchema;
  * @property string $ParentMenuItemIDs
  * @property string $CssClassName
  * @property int $Position
- *
- * @property MenuItem[] $Children
+ * @property Collection|MenuItem[] $Children
  * @property MenuItem $Parent
+ * @property int $MenuID Repository field
+ * @property-read Menu $Menu Relationship
+ * @property-read \TinyTours\BookingApp\Models\TinyToursNavigationMenuItem[]|RepositoryCollection $ChildMenuItems Relationship
+ * @property-read mixed $ParentMenuItemIDArray {@link getParentMenuItemIDArray()}
  */
 class MenuItem extends Model
 {
@@ -68,10 +73,38 @@ class MenuItem extends Model
         return $schema;
     }
 
+    /**
+     * @return RepositoryCollection
+     * @throws \Rhubarb\Stem\Exceptions\FilterNotSupportedException
+     */
     public static function getTopLevelMenus()
     {
-        $menus = new RepositoryCollection("MenuItem");
-        $menus->filter(new Equals("ParentMenuItemID", 0));
+        $menus = MenuItem::find();
+        $menus->filter(
+            new AndGroup(
+                new Equals("ParentMenuItemID", 0),
+                new Equals('MenuID', 0)
+            )
+        );
+        $menus->replaceSort(
+            [
+                "Position" => false,
+                "MenuName" => true
+            ]
+        );
+
+        return $menus;
+    }
+
+    /**
+     * @param Menu $menu
+     * @return Collection|MenuItem[]
+     * @throws \Rhubarb\Stem\Exceptions\FilterNotSupportedException
+     */
+    public static function getTopLevelMenuItemsForMenu(Menu $menu)
+    {
+        $menus = $menu->MenuItems->filter(new Equals('ParentMenuItemID', 0));
+
         $menus->replaceSort(
             [
                 "Position" => false,
@@ -93,6 +126,9 @@ class MenuItem extends Model
         return true;
     }
 
+    /**
+     * @return Collection
+     */
     protected function getChildren()
     {
         $this->clearPropertyCache();
@@ -108,11 +144,19 @@ class MenuItem extends Model
         return $children;
     }
 
+    /**
+     * @param $url
+     * @return Model|static
+     * @throws \Rhubarb\Stem\Exceptions\RecordNotFoundException
+     */
     public static function findByUrl($url)
     {
         return self::findFirst(new Equals("Url", $url));
     }
 
+    /**
+     * @return array
+     */
     private function getAllParents()
     {
         $parents = [];
@@ -139,6 +183,9 @@ class MenuItem extends Model
         $this->ParentMenuItemIDs = implode(",", $parentIds);
     }
 
+    /**
+     * @return mixed
+     */
     public function getParentMenuItemIDArray()
     {
         return explode(",", $this->ParentMenuItemIDs);
