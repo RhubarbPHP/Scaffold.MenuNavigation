@@ -102,7 +102,7 @@ class TwoLevelMenuPresenter extends Presenter
         // Remove items that we don't have permission to see.
         foreach ($this->view->primaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
-                $itemsToRemove[] = $key;
+                $itemsToRemove[$key] = '';
             }
         }
 
@@ -112,7 +112,7 @@ class TwoLevelMenuPresenter extends Presenter
         // Remove items that we don't have permission to see.
         foreach ($this->view->secondaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
-                $itemsToRemove[] = $key;
+                $itemsToRemove[$key] = '';
             }
         }
 
