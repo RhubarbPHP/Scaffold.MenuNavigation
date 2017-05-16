@@ -137,7 +137,7 @@ class TwoLevelMenu extends Leaf
         // Remove items that we don't have permission to see.
         foreach ($this->model->primaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
-                $itemsToRemove[] = $key;
+                $itemsToRemove[$key] = '';
             }
         }
 
@@ -147,7 +147,7 @@ class TwoLevelMenu extends Leaf
         // Remove items that we don't have permission to see.
         foreach ($this->model->secondaryMenuItems as $key => $item) {
             if (!$item->isPermitted()) {
-                $itemsToRemove[] = $key;
+                $itemsToRemove[$key] = '';
             }
         }
 
