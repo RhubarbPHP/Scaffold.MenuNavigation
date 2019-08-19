@@ -19,7 +19,6 @@
 namespace Rhubarb\Scaffolds\NavigationMenu;
 
 use Rhubarb\Stem\Collections\Collection;
-use Rhubarb\Stem\Collections\CollectionJoin;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
@@ -71,7 +70,6 @@ class MenuItem extends Model
     public static function getTopLevelMenus()
     {
         $menus = MenuItem::find(new Equals("ParentMenuItemID", 0));
-        //$menus->filter(new Equals("ParentMenuItemID", 0));
         $menus->replaceSort(
             [
                 "Position" => false,
