@@ -89,10 +89,10 @@ class TwoLevelMenu extends Leaf
 //                }
 //            }
 
-            $menuItem = $this->attemptToMatchParentMenuItem($currentUrl);
+            $menuItem = $this->attemptToMatchParentMenuItem($currentUrl, $model->primaryMenuItems);
             if ($menuItem) {
-                $model->activePrimaryMenuItemId = $item->MenuItemID;
-                $model->secondaryMenuItems = $item->Children;
+                $model->activePrimaryMenuItemId = $menuItem->MenuItemID;
+                $model->secondaryMenuItems = $menuItem->Children;
             }
         }
 
@@ -143,10 +143,10 @@ class TwoLevelMenu extends Leaf
         return $model;
     }
 
-    protected function attemptToMatchParentMenuItem($currentUrl, $delim = "/")
+    protected function attemptToMatchParentMenuItem($currentUrl, $primaryMenuItems, $delim = "/")
     {
         $urlParts = explode($delim, $currentUrl);
-        $potentialMatches = $this->model->primaryMenuItems;
+        $potentialMatches = $primaryMenuItems;
 
         while (true) {
             if (count($urlParts) === 0 || count($potentialMatches) === 0) {
@@ -155,6 +155,10 @@ class TwoLevelMenu extends Leaf
 
             $matches = [];
             $urlPartToSearch = array_shift($urlParts);
+
+            if (empty($urlPartToSearch)) {
+                continue;
+            }
 
             foreach ($potentialMatches as $primaryMenuItem) {
                 if (strpos($primaryMenuItem->Url, $urlPartToSearch) !== false) {
@@ -167,5 +171,7 @@ class TwoLevelMenu extends Leaf
                 return $potentialMatches[0];
             }
         }
+
+        return false;
     }
 }
