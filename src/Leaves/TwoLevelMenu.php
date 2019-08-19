@@ -81,12 +81,18 @@ class TwoLevelMenu extends Leaf
 
         if (!$foundActivePrimary) {
             // See which of the top level menu items best matches the current page.
-            foreach ($model->primaryMenuItems as $item) {
-                if (stripos($currentUrl, $item->Url) === 0) {
-                    $model->activePrimaryMenuItemId = $item->MenuItemID;
-                    $model->secondaryMenuItems = $item->Children;
-                    break;
-                }
+//            foreach ($model->primaryMenuItems as $item) {
+//                if (stripos($currentUrl, $item->Url) === 0) {
+//                    $model->activePrimaryMenuItemId = $item->MenuItemID;
+//                    $model->secondaryMenuItems = $item->Children;
+//                    break;
+//                }
+//            }
+
+            $menuItem = $this->attemptToMatchParentMenuItem($currentUrl);
+            if ($menuItem) {
+                $model->activePrimaryMenuItemId = $item->MenuItemID;
+                $model->secondaryMenuItems = $item->Children;
             }
         }
 
@@ -135,5 +141,31 @@ class TwoLevelMenu extends Leaf
         $model->secondaryMenuItems = array_diff_key($model->secondaryMenuItems, $itemsToRemove);
 
         return $model;
+    }
+
+    protected function attemptToMatchParentMenuItem($currentUrl, $delim = "/")
+    {
+        $urlParts = explode($delim, $currentUrl);
+        $potentialMatches = $this->model->primaryMenuItems;
+
+        while (true) {
+            if (count($urlParts) === 0 || count($potentialMatches) === 0) {
+                return false;
+            }
+
+            $matches = [];
+            $urlPartToSearch = array_shift($urlParts);
+
+            foreach ($potentialMatches as $primaryMenuItem) {
+                if (strpos($primaryMenuItem->Url, $urlPartToSearch) !== false) {
+                    $matches[] = $primaryMenuItem;
+                }
+            }
+
+            $potentialMatches = $matches;
+            if (count($potentialMatches) === 1) {
+                return $potentialMatches[0];
+            }
+        }
     }
 }
