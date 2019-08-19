@@ -81,28 +81,19 @@ class TwoLevelMenu extends Leaf
 
         if (!$foundActivePrimary) {
             // See which of the top level menu items best matches the current page.
-            foreach ($model->primaryMenuItems as $item) {
-                if (stripos($currentUrl, $item->Url) === 0) {
-                    $model->activePrimaryMenuItemId = $item->MenuItemID;
-                    $model->secondaryMenuItems = $item->Children;
-                    break;
-                }
+            $menuItem = $this->attemptToMatchMenuItem($currentUrl, $model->primaryMenuItems);
+            if ($menuItem) {
+                $model->activePrimaryMenuItemId = $menuItem->MenuItemID;
+                $model->secondaryMenuItems = $menuItem->Children;
             }
         }
 
         if (isset($model->activePrimaryMenuItemId) && ($model->activePrimaryMenuItemId !== null)) {
             // Search for and select the secondary item.
-            foreach ($model->secondaryMenuItems as $item) {
-                if ($parents !== null) {
-                    if (in_array($item->MenuItemID, $parents) || ($item->Url == $currentUrl)) {
-                        $model->activeSecondaryMenuItemId = $item->MenuItemID;
-                        break;
-                    }
-                } else {
-                    if (stripos($currentUrl, $item->Url) === 0) {
-                        $model->activeSecondaryMenuItemId = $item->MenuItemID;
-                        break;
-                    }
+            if (count($model->secondaryMenuItems) > 0) {
+                $menuItem = $this->attemptToMatchMenuItem($currentUrl, $model->secondaryMenuItems);
+                if ($menuItem) {
+                    $model->activeSecondaryMenuItemId = $menuItem->MenuItemID;
                 }
             }
         }
@@ -135,5 +126,47 @@ class TwoLevelMenu extends Leaf
         $model->secondaryMenuItems = array_diff_key($model->secondaryMenuItems, $itemsToRemove);
 
         return $model;
+    }
+
+    /**
+     * Iterates through the $menuItems array and attempts to pick the best MenuItem object to satisfy the URL.
+     *
+     * Will return false if a match cannot be found. In cases where there are multiple potential matches at the end
+     * of evaluating the URL, will return the first MenuItem it encountered. This can be impacted by sorts on the
+     * $menuItems array.
+     *
+     * @param string $currentUrl The URL to match a MenuItem on
+     * @param array $menuItems An array of MenuItem objects
+     * @param string $delim The delimiter to split the $currentUrl parameter apart with
+     *
+     * @return bool|mixed
+     */
+    protected function attemptToMatchMenuItem($currentUrl, $menuItems, $delim = "/")
+    {
+        $urlParts = preg_split("@$delim@", $currentUrl, NULL, PREG_SPLIT_NO_EMPTY);
+        $potentialMatches = $menuItems;
+
+        while (true) {
+            //We either have no more URL parts to go or we only have one potential match
+            if (count($urlParts) === 0 || count($potentialMatches) === 1) {
+                break;
+            }
+
+            $matches = [];
+            $urlPartToSearch = array_shift($urlParts);
+
+            foreach ($potentialMatches as $menuItem) {
+                if (strpos($menuItem->Url, $urlPartToSearch) !== false) {
+                    $matches[] = $menuItem;
+                }
+            }
+
+            //We only want to update our matches if we have more to search on!
+            if (count($matches) > 0) {
+                $potentialMatches = $matches;
+            }
+        }
+
+        return (count($potentialMatches) > 0) ? $potentialMatches[0] : false;
     }
 }
